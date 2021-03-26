@@ -31,7 +31,7 @@ def get_recommendations(articles, ids, ratings):
         for i in range(0, num):
             certainty = certainty + num/10
             recs.append({"id": int(df_tmp.iloc[i]['cg10']), "certainty": float(num / 10),
-                         "reason": "{}% Ihrer präferierten Artikel entstammen der Rubrik {}".format(num * 10, rub[0])})
+                         "reason": "{}% of your preferred articles belong to category {}".format(num * 10, rub[0])})
 
     payload={'name': 'Categories Recommender',
         'reason': 'Based on your favourite categories and recency we present you with the following articles.',

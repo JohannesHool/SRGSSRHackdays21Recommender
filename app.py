@@ -27,11 +27,11 @@ def get_initial():
     return jsonify(results=recommendations)
 
 
-@app.route('/recommend', methods=['POST'])
+@app.route('/recommend', methods=['GET', 'POST'])
 def get_recommendations_from_json():
 
     # Get data from request params
-    content = request.get_json()
+    content = request.get_json(force=True)
     ids = []
     ratings = []
 

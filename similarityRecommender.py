@@ -1,6 +1,8 @@
 import pandas as pd
 import requests
 from requests.auth import HTTPBasicAuth
+import random
+import numpy as np
 
 
 # Code Mauro
@@ -10,7 +12,7 @@ def request_w2v(x=None, limit=10):
     df['id']=x
     return df
 
-def get_recommendations(data, ids, ratings):
+def get_recommendations_depr(data, ids, ratings):
 
     new_csv = data.copy()
 
@@ -24,6 +26,7 @@ def get_recommendations(data, ids, ratings):
 
     for x in df_input[df_input['rating']==1]['id'].tolist():
         df_result = df_result.append(request_w2v(x, 10))
+
 
     df_result['article_id'] = df_result['article_id'].astype(int)
     df_result = df_result[~(df_result['article_id'].isin(df_input[df_input['rating']==1]['id'].tolist()))].drop_duplicates(subset=['article_id'], keep='first')
@@ -41,3 +44,36 @@ def get_recommendations(data, ids, ratings):
     'articles':dicto_sim}
 
     return payload_similarity
+
+
+def get_example_recommendations(articles):
+    df_art_info_total = articles
+    ids = df_art_info_total['cg10'].sample(50).values
+    ratings = np.random.randint(2, size=50)
+    return get_recommendations(articles, ids, ratings)
+
+
+def get_recommendations(articles, ids, ratings):
+    # load all cleaned Articles
+    df_art_info_total = articles
+
+    # load the selected articles in from the choice-screen
+    df_input = pd.DataFrame({'id': ids, 'rating': ratings})
+
+    # compute 10 best matches from authors (based also on visits and recency)
+    author_result = df_art_info_total[df_art_info_total['author'].isin(df_art_info_total[df_art_info_total['cg10'].isin(df_input[df_input['rating']==1].id.to_list())]['author'].tolist())].sort_values(by='sort_score',ascending=False).head(10)
+    explain_string_author = 'Based on your preferred Authors, popularity and recency we present you with the following articles.'
+
+    # create a results-dictionary
+    dicto = author_result[['cg10', 'sort_score', 'author']].reset_index(drop=True).rename(columns={'cg10': 'id', 'sort_score': 'certainty', 'author': 'reason'})
+
+    dicto['reason'] = ['{}% match with one of your favourited articles.'.format(int(random.uniform(0, 100))) for x in range(0, len(dicto))]
+
+    dicto = dicto.to_dict(orient='records')
+    payload_author={'name': 'Topics Reccommender',
+    'reason': 'Based on the topics of your rated articles, recency and popularity we present you with the following articles.',
+    'certainty':0.5,
+    'articles':dicto}
+
+    return payload_author
+

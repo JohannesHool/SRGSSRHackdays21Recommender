@@ -35,10 +35,8 @@ def hello_world():
 @app.route('/initial', methods=['GET'])
 def get_initial():
 
-    # Get some rancom recommendations from author recommender
-    ids = articles['cg10'].sample(10).values
-    ratings = np.random.randint(2, size=10)
-    author_recommendations = authorRecommender.get_recommendations(articles, ids, ratings)
+    # Get some random recommendations from author recommender
+    author_recommendations = authorRecommender.get_example_recommendations(articles)
 
     # Store recommendations in a list with a name indicating the recommender as initial recommendations
     recommendations = []
@@ -95,7 +93,7 @@ def get_recommendations():
         {'name': rubric_recommendations['name'], 'recommendations': rubric_recommendations['articles'],
          'reason': rubric_recommendations['reason'], 'certainty': rubric_recommendations['certainty']})
 
-    similarity_recommendations = similarityRecommender.get_recommendations(df_art_info_total, ids, ratings)
+    similarity_recommendations = similarityRecommender.get_example_recommendations(articles)
     recommendations.append(
         {'name': similarity_recommendations['name'], 'recommendations': similarity_recommendations['articles'],
          'reason': similarity_recommendations['reason'], 'certainty': similarity_recommendations['certainty']})

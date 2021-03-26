@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT app:srgrecrec
+web: gunicorn app:app

@@ -95,10 +95,10 @@ def get_recommendations():
         {'name': rubric_recommendations['name'], 'recommendations': rubric_recommendations['articles'],
          'reason': rubric_recommendations['reason'], 'certainty': rubric_recommendations['certainty']})
 
-    #similarity_recommendations = similarityRecommender.get_recommendations(df_art_info_total, ids, ratings)
-    #recommendations.append(
-    #    {'name': similarity_recommendations['name'], 'recommendations': similarity_recommendations['articles'],
-    #     'reason': similarity_recommendations['reason'], 'certainty': similarity_recommendations['certainty']})
+    similarity_recommendations = similarityRecommender.get_recommendations(df_art_info_total, ids, ratings)
+    recommendations.append(
+        {'name': similarity_recommendations['name'], 'recommendations': similarity_recommendations['articles'],
+         'reason': similarity_recommendations['reason'], 'certainty': similarity_recommendations['certainty']})
 
     return jsonify(results=recommendations)
 

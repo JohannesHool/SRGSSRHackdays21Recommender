@@ -69,7 +69,7 @@ def get_recommendations_from_json():
         {'name': rubric_recommendations['name'], 'recommendations': rubric_recommendations['articles'],
          'reason': rubric_recommendations['reason'], 'certainty': rubric_recommendations['certainty']})
 
-    similarity_recommendations = similarityRecommender.get_recommendations(df_art_info_total, ids, ratings)
+    similarity_recommendations = similarityRecommender.get_example_recommendations(articles)
     recommendations.append(
         {'name': similarity_recommendations['name'], 'recommendations': similarity_recommendations['articles'],
          'reason': similarity_recommendations['reason'], 'certainty': similarity_recommendations['certainty']})

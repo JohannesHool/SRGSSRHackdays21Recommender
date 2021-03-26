@@ -17,7 +17,6 @@ def get_recommendations(articles, ids, ratings):
     # load the selected articles in from the choice-screen
     df_input = pd.DataFrame({'id': ids, 'rating': ratings})
 
-
     # compute 10 best matches from authors (based also on visits and recency)
     author_result = df_art_info_total[df_art_info_total['author'].isin(df_art_info_total[df_art_info_total['cg10'].isin(df_input[df_input['rating']==1].id.to_list())]['author'].tolist())].sort_values(by='sort_score',ascending=False).head(10)
     explain_string_author = 'Based on your preferred Authors, popularity and recency we present you with the following articles.'

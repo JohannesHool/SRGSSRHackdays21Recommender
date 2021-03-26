@@ -14,6 +14,9 @@ def get_recommendations(data, ids, ratings):
 
     new_csv = data.copy()
 
+    ids = ids[:7]
+    ratings = ratings[:7]
+
     # load the selected articles in from the choice-screen
     df_input = pd.DataFrame({'id': ids, 'rating': ratings})
 

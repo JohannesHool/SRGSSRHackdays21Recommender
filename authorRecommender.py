@@ -5,8 +5,8 @@ import json
 
 def get_example_recommendations(articles):
     df_art_info_total = articles
-    ids = df_art_info_total['cg10'].sample(10).values
-    ratings = np.random.randint(2, size=10)
+    ids = df_art_info_total['cg10'].sample(50).values
+    ratings = np.random.randint(2, size=50)
     return get_recommendations(articles, ids, ratings)
 
 

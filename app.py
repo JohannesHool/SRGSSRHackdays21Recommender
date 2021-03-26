@@ -31,7 +31,9 @@ def get_initial():
 def get_recommendations_from_json():
 
     # Get data from request params
+    print(request.data)
     content = json.loads(request.data)
+    print(content)
     ids = []
     ratings = []
 

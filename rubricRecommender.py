@@ -31,7 +31,7 @@ def get_recommendations(articles, ids, ratings):
                          "reason": "{}% deiner Lieblingsartikel entstammen der Rubrik {}".format(num * 10, rub[0])})
 
     payload={'name': 'rubric_recom',
-        'reason': 'Aufgrund der von Ihnen präferierten Rubriken werden ihnen folgende Artikel angezeigt.',
+        'reason': 'Aufgrund der von Ihnen präferierten Rubriken werden ihnen folgende aktuelle Artikel angezeigt.',
         'certainty': certainty/10,
         'articles':recs}
 

@@ -27,23 +27,20 @@ def get_initial():
     return jsonify(results=recommendations)
 
 
-@app.route('/recommend', methods=['GET'])
+@app.route('/recommend', methods=['POST'])
 def get_recommendations_from_json():
 
     # Get data from request params
-    print(request.data)
-    content = json.loads(request.data)
-    print(content)
+    content = request.get_json()
     ids = []
     ratings = []
 
     for rating in content['ratings']:
-        ids.push(int(rating['id']))
-        ratings.push(int(rating['rating']))
+        ids.append(int(rating['id']))
+        ratings.append(int(rating['rating']))
 
     # Store all recommendations in a list
     recommendations = []
-
     author_recommendations = authorRecommender.get_recommendations(articles, ids, ratings)
     recommendations.append({'name': author_recommendations['name'], 'recommendations': author_recommendations['articles'], 'reason': author_recommendations['reason'], 'certainty': author_recommendations['certainty']})
 

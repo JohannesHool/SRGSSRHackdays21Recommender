@@ -28,11 +28,11 @@ def get_recommendations(data, ids, ratings):
     df_result = pd.merge(df_result,new_csv[['cg10','headline']], how='left',left_on='id', right_on='cg10')
     df_sim_payload=df_result[['article_id','sort_score','headline_y']].rename(columns={'article_id':'id','sort_score':'certainty','headline_y':'reason'}).sort_values(by='certainty', ascending=False).head(10)
 
-    explain_string_similarity='Aufgrund Ihrer favorisierten Artikel werden ihnen folgende ähnliche und aktuelle Artikel angezeigt.'
+    explain_string_similarity='Based on the topics of your rated articles, recency and popularity we present you with the following articles.'
     certainty = float(df_sim_payload['certainty'].mean())*10
     dicto_sim=df_sim_payload.reset_index(drop=True).to_dict(orient='records')
 
-    payload_similarity={'name': 'sim_recom',
+    payload_similarity={'name': 'Topics Reccommender',
     'reason':explain_string_similarity,
     'certainty':certainty,
     'articles':dicto_sim}

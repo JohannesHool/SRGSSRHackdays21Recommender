@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+import json
 import pandas as pd
 import authorRecommender
 
@@ -14,36 +15,23 @@ def hello_world():
 
 @app.route('/initial', methods=['GET'])
 def get_initial():
-    try:
-        recommendations = []
 
-        author_recommendations = authorRecommender.get_example_recommendations(articles)
+    # Get some rancom recommendations from author recommender
+    author_recommendations = authorRecommender.get_example_recommendations(articles)
 
-        recommendations.append(
-            {'name': 'initial', 'recommendations': author_recommendations['articles'],
-             'reason': author_recommendations['reason'], 'certainty': author_recommendations['certainty']})
+    # Store recommendations in a list with a name indicating the recommender as initial recommendations
+    recommendations = []
+    recommendations.append(
+        {'name': 'initial', 'recommendations': author_recommendations['articles'], 'reason': author_recommendations['reason'], 'certainty': author_recommendations['certainty']})
 
-        return jsonify(results=recommendations)
-
-
-    except Exception as e:
-        return str(e)
-
-
-@app.route('/author', methods=['GET'])
-def get_author_recommendations():
-    try:
-        ids = [int(id) for id in request.args.get('ids').split(',')]
-        ratings = [int(rating) for rating in request.args.get('ratings').split(',')]
-        return authorRecommender.get_recommendations(articles, ids, ratings)
-    except Exception as e:
-        return str(e)
+    return jsonify(results=recommendations)
 
 
 @app.route('/recommend', methods=['GET'])
 def get_recommendations_from_json():
 
-    content = request.json
+    # Get data from request params
+    content = json.loads(request.data)
     ids = []
     ratings = []
 
@@ -51,6 +39,7 @@ def get_recommendations_from_json():
         ids.push(int(rating['id']))
         ratings.push(int(rating['rating']))
 
+    # Store all recommendations in a list
     recommendations = []
 
     author_recommendations = authorRecommender.get_recommendations(articles, ids, ratings)

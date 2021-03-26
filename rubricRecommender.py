@@ -20,11 +20,13 @@ def get_recommendations(articles, ids, ratings):
 
     rubs = sorted(rubs.items(), key=lambda x: x[1], reverse=True)
 
+    df_lim = articles[~articles['cg10'].isin(ids)]
+
     recs = []
     certainty = 0
     for rub in rubs:
         num = int(rub[1] / len(ids) * 10)
-        df_tmp = articles[articles['rub'] == rub[0]].sort_values('cp32', ascending=False)
+        df_tmp = df_lim[df_lim['rub'] == rub[0]].sort_values('cp32', ascending=False)
         for i in range(0, num):
             certainty = certainty + num/10
             recs.append({"id": int(df_tmp.iloc[i]['cg10']), "certainty": float(num / 10),

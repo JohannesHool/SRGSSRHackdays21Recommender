@@ -5,6 +5,7 @@ import json
 import pandas as pd
 import authorRecommender
 import rubricRecommender
+import similarityRecommender
 
 app = Flask(__name__)
 articles = pd.read_csv('data/articles.csv', error_bad_lines=False, converters={'art': eval, 'meta': eval})
@@ -19,6 +20,12 @@ def get_rubric(x):
 
 articles['rub'] = articles['art'].apply(get_rubric)
 
+
+# neues CSV senden
+#Code für neues Laden am Anfang
+new_csv=pd.read_csv('data/complete_dataset.csv')
+# für Auswahl am Anfang
+df_art_info_total = new_csv[new_csv['author_sort']==1]
 
 @app.route('/')
 def hello_world():
@@ -62,6 +69,11 @@ def get_recommendations_from_json():
         {'name': rubric_recommendations['name'], 'recommendations': rubric_recommendations['articles'],
          'reason': rubric_recommendations['reason'], 'certainty': rubric_recommendations['certainty']})
 
+    similarity_recommendations = similarityRecommender.get_recommendations(df_art_info_total, ids, ratings)
+    recommendations.append(
+        {'name': similarity_recommendations['name'], 'recommendations': similarity_recommendations['articles'],
+         'reason': similarity_recommendations['reason'], 'certainty': similarity_recommendations['certainty']})
+
     return jsonify(results=recommendations)
 
 
@@ -80,7 +92,12 @@ def get_recommendations():
     recommendations.append(
         {'name': rubric_recommendations['name'], 'recommendations': rubric_recommendations['articles'],
          'reason': rubric_recommendations['reason'], 'certainty': rubric_recommendations['certainty']})
-    print(recommendations)
+
+    similarity_recommendations = similarityRecommender.get_recommendations(df_art_info_total, ids, ratings)
+    recommendations.append(
+        {'name': similarity_recommendations['name'], 'recommendations': similarity_recommendations['articles'],
+         'reason': similarity_recommendations['reason'], 'certainty': similarity_recommendations['certainty']})
+
     return jsonify(results=recommendations)
 
 

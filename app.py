@@ -4,9 +4,21 @@ from flask import jsonify
 import json
 import pandas as pd
 import authorRecommender
+import rubricRecommender
 
 app = Flask(__name__)
-articles = pd.read_csv('data/articles.csv')
+articles = pd.read_csv('data/articles.csv', error_bad_lines=False, converters={'art': eval, 'meta': eval})
+
+
+def get_rubric(x):
+    try:
+        return x['rubrics'][0]['name']
+    except:
+        return 'None'
+
+
+articles['rub'] = articles['art'].apply(get_rubric)
+
 
 @app.route('/')
 def hello_world():
@@ -42,7 +54,13 @@ def get_recommendations_from_json():
     # Store all recommendations in a list
     recommendations = []
     author_recommendations = authorRecommender.get_recommendations(articles, ids, ratings)
-    recommendations.append({'name': author_recommendations['name'], 'recommendations': author_recommendations['articles'], 'reason': author_recommendations['reason'], 'certainty': author_recommendations['certainty']})
+    recommendations.append({'name': author_recommendations['name'], 'recommendations': author_recommendations['articles'],
+                            'reason': author_recommendations['reason'], 'certainty': author_recommendations['certainty']})
+
+    rubric_recommendations = rubricRecommender.get_recommendations(articles, ids, ratings)
+    recommendations.append(
+        {'name': rubric_recommendations['name'], 'recommendations': rubric_recommendations['articles'],
+         'reason': rubric_recommendations['reason'], 'certainty': rubric_recommendations['certainty']})
 
     return jsonify(results=recommendations)
 
@@ -58,6 +76,11 @@ def get_recommendations():
 
     recommendations.append({'name': author_recommendations['name'], 'recommendations': author_recommendations['articles'], 'reason': author_recommendations['reason'], 'certainty': author_recommendations['certainty']})
 
+    rubric_recommendations = rubricRecommender.get_recommendations(articles, ids, ratings)
+    recommendations.append(
+        {'name': rubric_recommendations['name'], 'recommendations': rubric_recommendations['articles'],
+         'reason': rubric_recommendations['reason'], 'certainty': rubric_recommendations['certainty']})
+    print(recommendations)
     return jsonify(results=recommendations)
 
 

@@ -27,7 +27,7 @@ def get_recommendations(articles, ids, ratings):
 
     payload_author={'name': 'author_recom',
     'reason':explain_string_author,
-    'certainty':1,
+    'certainty':0.5,
     'articles':dicto}
 
     return payload_author

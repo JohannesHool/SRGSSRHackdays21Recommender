@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-import json
+import numpy as np
 import pandas as pd
 import authorRecommender
 import rubricRecommender
@@ -36,7 +36,9 @@ def hello_world():
 def get_initial():
 
     # Get some rancom recommendations from author recommender
-    author_recommendations = authorRecommender.get_example_recommendations(articles)
+    ids = articles['cg10'].sample(10).values
+    ratings = np.random.randint(2, size=10)
+    author_recommendations = authorRecommender.get_recommendations(articles, ids, ratings)
 
     # Store recommendations in a list with a name indicating the recommender as initial recommendations
     recommendations = []

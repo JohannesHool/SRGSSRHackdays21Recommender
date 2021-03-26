@@ -9,8 +9,9 @@ def get_recommendations(articles, ids, ratings):
             idss.append(ids[i])
 
     ids = idss
+    arts = articles.copy()
 
-    arts = articles[articles['cg10'].isin(ids)]['rub'].values
+    arts = arts[arts['cg10'].isin(ids)]['rub'].values
     rubs = {}
     for rub in arts:
         if rub not in rubs:

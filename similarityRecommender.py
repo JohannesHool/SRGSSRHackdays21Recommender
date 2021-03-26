@@ -12,7 +12,7 @@ def request_w2v(x=None, limit=10):
 
 def get_recommendations(data, ids, ratings):
 
-    new_csv = data
+    new_csv = data.copy()
 
     # load the selected articles in from the choice-screen
     df_input = pd.DataFrame({'id': ids, 'rating': ratings})

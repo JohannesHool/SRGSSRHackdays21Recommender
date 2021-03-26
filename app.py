@@ -15,7 +15,17 @@ def hello_world():
 @app.route('/initial', methods=['GET'])
 def get_initial():
     try:
-        return authorRecommender.get_example_recommendations(articles)
+        recommendations = []
+
+        author_recommendations = authorRecommender.get_example_recommendations(articles)
+
+        recommendations.append(
+            {'name': 'initial', 'recommendations': author_recommendations['articles'],
+             'reason': author_recommendations['reason'], 'certainty': author_recommendations['certainty']})
+
+        return jsonify(results=recommendations)
+
+
     except Exception as e:
         return str(e)
 
